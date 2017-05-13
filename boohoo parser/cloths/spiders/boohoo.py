@@ -13,7 +13,7 @@ class BoohooSpider(CrawlSpider):
     rules = (
         Rule(LinkExtractor(allow=('.*color=.*')),
             callback='parse_image'),
-        Rule(LinkExtractor(allow=('/(kids|womens|mans)/.*'), deny=('.*/.*\?.*')),
+        Rule(LinkExtractor(allow=('/mens/.*'), deny=('.*/.*\?.*')),
             follow=True),
         Rule(LinkExtractor(allow=('.*/.*\?.*start=.*')),
             follow=True),
