@@ -2,3 +2,8 @@ google:
   cloud:
     key: AIzaSyDg_6WuTH5yYL0FB6ZQ3Dwcvtp7Zl21rYM
 
+spring:
+  http:
+    multipart:
+      max-file-size: 5Mb
+      max-request-size: 30Mb
