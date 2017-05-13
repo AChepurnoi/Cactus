@@ -9,21 +9,23 @@ import scrapy
 from scrapy.pipelines.images import ImagesPipeline
 from scrapy.exceptions import DropItem
 
+
 class ClothsPipeline():
     def process_item(self, item, spider):
         return item
+
 
 class ClearItem():
 
     def process_item(self, item, spider):
         item['description'] = ' '.join(item['description'])
         item['category'] = '|'.join(item['category'])
-        item['image_url'] = 'http://' + item['image_url'][0][2:]
         item['detail'] = item['detail'][0]
         item['url'] = item['url'][0]
         item['title'] = item['title'][0]
-        item['price'] = float(item['price'][0][1:])
+        item['price'] = item['price'][0]
         return item
+
 
 class JsonWriterPipeline():
     def __init__(self):

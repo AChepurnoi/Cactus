@@ -3,6 +3,7 @@ from keras.models import Sequential, Model
 from keras.layers import Dropout, Flatten, Dense, Merge
 from keras.callbacks import ModelCheckpoint
 from DataGen import ImageDataGenerator
+import pickle
 
 vec_size = 200
 n_classes = 10
@@ -51,6 +52,9 @@ def train_model():
             target_size=(100, 100),
             batch_size=32,
             class_mode='categorical')
+
+    inverse_index = {train_generator.class_indices[i]: i for i in train_generator.class_indices.keys()}
+    pickle.dump(inverse_index, 'inverse_index.pickle')
 
     checkpointer = ModelCheckpoint(filepath="./weights.hdf5", verbose=1, save_best_only=False)
     model.fit_generator(train_generator, 5, epochs=100000, callbacks=[checkpointer])
