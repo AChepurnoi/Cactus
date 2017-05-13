@@ -1,0 +1,36 @@
+group 'categorizer'
+version '0.1'
+
+buildscript {
+    ext.springBootVersion = '1.5.2.RELEASE'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-jackson:2.2.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    compile 'io.reactivex:rxjava:1.1.6'
+
+    compile('org.projectlombok:lombok')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
