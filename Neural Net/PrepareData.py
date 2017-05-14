@@ -16,8 +16,8 @@ def clear_text(text):
     return words
 
 
-def create_vectorizer(data, max_features=200):
-    vectorizer = CountVectorizer(analyzer="word", tokenizer=None, preprocessor=None, stop_words=None, max_features=200)
+def create_vectorizer(data, max_features=700):
+    vectorizer = CountVectorizer(analyzer="word", tokenizer=None, preprocessor=None, stop_words=None, max_features=700)
     vectorizer.fit([clear_text(x['text']) for x in data])
 
     return vectorizer
@@ -56,11 +56,11 @@ if __name__ == '__main__':
     with open('data.json') as data_file:
         data = np.array(json.load(data_file))
 
-    test_data = np.random.choice(data, 2000)
-
-    vectorizer = create_vectorizer(test_data)
+    print('Create vectorization')
+    vectorizer = create_vectorizer(data)
+    print('Vectorization complete')
 
     filename = 'vectorizer.pkl'
     joblib.dump(vectorizer, filename)
 
-    record_to_cat('final/images', 'dataset', test_data, vectorizer)
+    record_to_cat('final/images', 'dataset', data, vectorizer)

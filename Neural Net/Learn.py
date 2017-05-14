@@ -5,10 +5,9 @@ from keras.callbacks import ModelCheckpoint
 from DataGen import ImageDataGenerator
 import pickle
 
-vec_size = 200
-n_classes = 10
+vec_size = 700
 
-def build_model():
+def build_model(n_classes):
     input_tensor = Input(shape=(100, 100, 3))
 
     model = applications.VGG16(weights='imagenet', include_top=False, input_tensor=input_tensor)
@@ -43,21 +42,22 @@ def build_model():
 
 def train_model():
 
-    model = build_model()
-
     datagen = ImageDataGenerator(rescale=1. / 255)
 
     train_generator = datagen.flow_from_directory(
             'dataset',
             target_size=(100, 100),
-            batch_size=32,
+            batch_size=64,
             class_mode='categorical')
 
     inverse_index = {train_generator.class_indices[i]: i for i in train_generator.class_indices.keys()}
-    pickle.dump(inverse_index, 'inverse_index.pickle')
+    with open('inverse_index.pickle', 'wb') as file:
+        pickle.dump(inverse_index, file)
+
+    model = build_model(len(inverse_index))
 
     checkpointer = ModelCheckpoint(filepath="./weights.hdf5", verbose=1, save_best_only=False)
-    model.fit_generator(train_generator, 5, epochs=100000, callbacks=[checkpointer])
+    model.fit_generator(train_generator, 32, epochs=100000, callbacks=[checkpointer])
 
 if __name__ == '__main__':
     train_model()

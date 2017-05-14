@@ -11,12 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger
 object ImageLoader {
 
 
-  const val FOLDER = "datav3"
+  const val FOLDER = "final"
 
   @JvmStatic
   fun main(args: Array<String>) {
     val mapper = ObjectMapper().registerKotlinModule()
-    val items = mapper.readValue<List<Item>>(File("$FOLDER/items.json"), object : TypeReference<List<Item>>() {})
+    val items = mapper.readValue<List<Item>>(File("$FOLDER/data2.json"), object : TypeReference<List<Item>>() {})
     val counter = AtomicInteger(items.size)
     items.forEach { item ->
       async(CommonPool) {
@@ -27,7 +27,7 @@ object ImageLoader {
 
     while (counter.get() > 0){
       Thread.sleep(5000)
-      println("Loading images...")
+      println("Counter: ${counter.get()}Loading images...")
     }
   }
 
