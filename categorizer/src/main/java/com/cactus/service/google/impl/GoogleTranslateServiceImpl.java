@@ -1,21 +1,19 @@
-package com.cactus.service;
+package com.cactus.service.google.impl;
 
-import com.cactus.domain.dto.google.GoogleTranslateResponse;
-import com.cactus.domain.dto.google.GoogleTranslateResponseData;
-import com.cactus.domain.dto.google.TranslationResponse;
+import com.cactus.domain.dto.google.translate.GoogleTranslateResponse;
+import com.cactus.domain.dto.google.translate.TranslationResponse;
+import com.cactus.service.google.GoogleTranslateAPI;
+import com.cactus.service.google.GoogleTranslateService;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by Sasha on 5/13/17.

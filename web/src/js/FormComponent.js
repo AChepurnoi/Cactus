@@ -20,52 +20,42 @@ export default class FormComponent extends React.Component {
 
     }
 
-    dataURItoBlob(dataURI) {
-        // convert base64 to raw binary data held in a string
-        // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-        let byteString = atob(dataURI.split(',')[1]);
-
-        // separate out the mime component
-        let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
-        // write the bytes of the string to an ArrayBuffer
-        let ab = new ArrayBuffer(byteString.length);
-        let ia = new Uint8Array(ab);
-        for (let i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
+    dataURLtoBlob(dataurl) {
+        let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
         }
-
-        // write the ArrayBuffer to a blob, and you're done
-        let blob = new Blob([ab], {type: mimeString});
-        return blob;
-
-        // Old code
-        // var bb = new BlobBuilder();
-        // bb.append(ab);
-        // return bb.getBlob(mimeString);
+        return new Blob([u8arr], {type: mime});
     }
-
 
 
     imageChanged(picture) {
         this.setState({picture});
     }
 
-    submitForm(){
+    submitForm() {
         let data = new FormData();
         const {title, description, price, picture} = this.state;
         data.append("title", title);
         data.append("description", description);
         data.append("price", price);
-        if(picture) data.append("image",this.dataURItoBlob(picture));
-
-        this.client.post("/check", data)
+        if (picture) data.append("image", picture, "image");
+        this.client.post("/check", data).then(res => {
+            let data = res.data;
+            console.log(data);
+            this.setState({
+                predictions: data.predictions,
+                labels: data.labels
+            })
+        })
     }
 
     render() {
         return <div className="container">
             <div className="row">
-                <form className="col-md-4">
+                <h2 className="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 text-center">Form fixer</h2>
+                <form className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                     <div className="form-group">
                         <label for="exampleInputEmail1">Product title</label>
                         <input type="email" className="form-control"
@@ -85,11 +75,18 @@ export default class FormComponent extends React.Component {
                                onChange={data => this.setState({price: data.target.value})}
                                id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
                     </div>
-                    <div className="form-group">
+                    {this.state.labels &&
+                    this.state.labels.map((item, index)=> <span key={index} className="col-sm-4 image-label label label-warning">{item}</span> )}
 
+                    <div className="form-group text-center">
                         <ImagePicker onChanged={(image) => this.imageChanged(image)}/>
                     </div>
-                    <div className="form-group">
+
+                    <div className="form-group text-center">
+                        {this.state.predictions &&
+                        this.state.predictions.map((item, index)=> <div><div key={index} className="prediction label label-info">{item.crumbs}</div></div> )}
+                    </div>
+                    <div className="form-group text-center">
 
                         <div className="btn btn-success" onClick={() => this.submitForm()}>Submit form</div>
                     </div>
