@@ -1,4 +1,4 @@
-package com.cactus.domain.dto.google;
+package com.cactus.domain.dto.google.translate;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
