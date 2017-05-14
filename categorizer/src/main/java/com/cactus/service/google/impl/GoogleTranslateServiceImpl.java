@@ -24,7 +24,6 @@ public class GoogleTranslateServiceImpl implements GoogleTranslateService {
     @Value("${google.cloud.key}")
     private String key;
 
-    private final String TARGET_LANG = "en";
 
     private GoogleTranslateAPI api;
 
@@ -41,16 +40,15 @@ public class GoogleTranslateServiceImpl implements GoogleTranslateService {
     }
 
     @Override
-    public Single<String> translate(String q) {
+    public Single<TranslationResponse> translate(String q, String lang) {
         Map<String, String> params = new HashMap<>();
         params.put("q", q);
-        params.put("target", TARGET_LANG);
+        params.put("target", lang);
         params.put("key", key);
 
         return api.translate(params)
                 .map(GoogleTranslateResponse::getData)
                 .flatMap(data -> Observable.fromIterable(data.getTranslations()))
-                .map(TranslationResponse::getTranslatedText)
                 .singleOrError();
 
     }

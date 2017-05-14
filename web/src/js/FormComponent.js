@@ -6,6 +6,7 @@
 import React from 'react'
 import ImagePicker from "./ImagePicker";
 import * as axios from "axios";
+import SelectableLable from "./SelectableLable";
 
 
 export default class FormComponent extends React.Component {
@@ -54,44 +55,52 @@ export default class FormComponent extends React.Component {
     render() {
         return <div className="container">
             <div className="row">
-                <h2 className="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 text-center">Form fixer</h2>
-                <form className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                    <div className="form-group">
-                        <label for="exampleInputEmail1">Product title</label>
-                        <input type="email" className="form-control"
-                               onChange={data => this.setState({title: data.target.value})}
-                               id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
-                    </div>
-                    <div className="form-group">
-                        <label for="exampleInputEmail1">Product description</label>
-                        <input type="email" className="form-control"
-                               onChange={data => this.setState({description: data.target.value})}
-                               id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
-                    </div>
-                    <div className="form-group">
-                        <label for="exampleInputEmail1">Price</label>
+                <div className="panel panel-default margin-top">
+                    <div className="panel-body">
+                        <h2 className="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 text-center">Check product</h2>
+                        <form className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                            <div className="form-group">
+                                <label for="exampleInputEmail1">Product title</label>
+                                <input type="text" className="form-control"
+                                       onChange={data => this.setState({title: data.target.value})}
+                                       id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter title"/>
+                            </div>
+                            <div className="form-group">
+                                <label for="exampleInputEmail1">Product description</label>
+                                <input type="email" className="form-control"
+                                       onChange={data => this.setState({description: data.target.value})}
+                                       id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter description"/>
+                            </div>
+                            <div className="form-group">
+                                <label for="exampleInputEmail1">Price</label>
 
-                        <input type="email" className="form-control"
-                               onChange={data => this.setState({price: data.target.value})}
-                               id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
-                    </div>
-                    {this.state.labels &&
-                    this.state.labels.map((item, index)=> <span key={index} className="col-sm-4 image-label label label-warning">{item}</span> )}
+                                <input type="email" className="form-control"
+                                       onChange={data => this.setState({price: data.target.value})}
+                                       id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter price"/>
+                            </div>
+                            <div>
+                                {this.state.labels &&
+                                this.state.labels.map((item, index) => <SelectableLable key={index} text={item}/>)}
+                            </div>
+                            <div className="form-group text-center">
+                                <ImagePicker onChanged={(image) => this.imageChanged(image)}/>
+                            </div>
 
-                    <div className="form-group text-center">
-                        <ImagePicker onChanged={(image) => this.imageChanged(image)}/>
-                    </div>
+                            <div className="form-group text-center">
+                                {this.state.predictions &&
+                                this.state.predictions.map((item, index) => <div className="prediction"
+                                                                                 onClick={() => this.setState({category: index})}>
+                                    <div key={index}
+                                         className={"label " + (this.state.category === index ? "label-success" : "label-info")}>{item.crumbs}</div>
+                                </div>)}
+                            </div>
+                            <div className="form-group text-center">
 
-                    <div className="form-group text-center">
-                        {this.state.predictions &&
-                        this.state.predictions.map((item, index)=> <div><div key={index} className="prediction label label-info">{item.crumbs}</div></div> )}
+                                <div className="btn btn-success" onClick={() => this.submitForm()}>Submit form</div>
+                            </div>
+                        </form>
                     </div>
-                    <div className="form-group text-center">
-
-                        <div className="btn btn-success" onClick={() => this.submitForm()}>Submit form</div>
-                    </div>
-                </form>
-
+                </div>
             </div>
 
         </div>

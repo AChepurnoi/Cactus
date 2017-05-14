@@ -12,4 +12,7 @@ public class TranslationResponse {
     private String translatedText;
     private String detectedSourceLanguage;
 
+    public boolean notEnglish(){
+        return !detectedSourceLanguage.equalsIgnoreCase("en");
+    }
 }
