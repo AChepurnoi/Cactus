@@ -52,15 +52,15 @@ data class Item(val title: String, val description: String, val price: String,
   }
 }
 
-data class ItemV2(val description: String, val title: String, val category: String,
+data class ItemV2(val description: String, val category: String,
                   val url: String, val image_url: String, val id: Int,
-                  val price: Double, val detail: String) {
+                  val price: Double, val detail: String,val title: String = "") {
 
   fun convertToItem(): Item {
     val last = category.split("|").last()
     val crumbss = category.replace("|", " > ")
     return Item(title = title, description = description + detail, price = price.toString(),
-            category = last, crumbs = crumbss, pic = image_url, id = id.toString())
+            category = last, crumbs = crumbss, pic = image_url, id = UUID.randomUUID().toString())
 
   }
 
